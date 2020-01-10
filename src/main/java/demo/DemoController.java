@@ -21,13 +21,14 @@ public class DemoController
 {
     ArrayList<UUID> repository = new ArrayList<UUID>(65536);
 
-    private Boolean isOffline;
+    Boolean isOffline = false;
 
     @GetMapping(path="/health/isReady", produces = "plain/text")
     public ResponseEntity<String> readinessProbe(@RequestParam Optional<Boolean> offline)
     {
-        // Atualiza o flag "forced-offline"
-        this.isOffline = offline.orElse(false);
+        // Ativa/Desativa o flag "forced-offline", caso tenha sido requisitado
+        if ( offline.isPresent() )
+            this.isOffline = offline.get();
 
         // Obtém o limite de requests simultâneos (parametrizado em variável de ambiente)
         int activeRequestsLimit = Helpers.getEnvVar("ACTIVE_REQUESTS_LIMIT", 999);

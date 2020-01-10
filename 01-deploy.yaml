@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-aks-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: demo-aks
+  template:
+    metadata:
+      labels:
+        app: demo-aks
+    spec:
+      containers:
+      - name: demo-aks
+        image: avanadebr/demo-aks:0.3.0-zulu
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        env:
+        - name: CATALINA_OPTS
+          value: "-Xms100m -Xmx400m -XX:MaxRAM=500m"
+        - name: ACTIVE_REQUESTS_LIMIT
+          value: "10"
+        - name: MEMORY_USAGE_PERCENT_THRESHOLD
+          value: "80"
+        resources:
+          requests:
+            memory: 512Mi
+            cpu: 50m
+          limits:
+            memory: 512Mi
+        livenessProbe:
+          httpGet:
+            path: /health/isAlive
+            port: 8080
+          initialDelaySeconds: 120
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 1
+        readinessProbe:
+          httpGet:
+            path: /health/isReady
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          timeoutSeconds: 2
+          failureThreshold: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-aks-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: demo-aks
+  ports:
+    - port: 8080
+  selector:
+    app: demo-aks
