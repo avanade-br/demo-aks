@@ -16,4 +16,4 @@ spec:
         name: route_request
       target:
         type: AverageValue
-        averageValue: 10
+        averageValue: 5
