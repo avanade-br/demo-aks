@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: demo-aks-deployment
+  name: demo-aks
 spec:
   replicas: 3
   selector:
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: demo-aks
-        image: avanadebr/demo-aks:0.3.0-zulu
+        image: avanadebr/demo-aks:0.4.0-zulu
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
@@ -51,7 +51,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: demo-aks-service
+  name: demo-aks
 spec:
   type: LoadBalancer
   selector:

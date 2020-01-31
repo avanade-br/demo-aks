@@ -8,7 +8,7 @@ spec:
     name: demo-aks-deployment
     kind: Deployment
   minReplicas: 2
-  maxReplicas: 8
+  maxReplicas: 64
   metrics:
   - type: Pods
     pods:
@@ -16,4 +16,4 @@ spec:
         name: route_request
       target:
         type: AverageValue
-        averageValue: 5
+        averageValue: 1

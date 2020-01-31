@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,13 @@ public class DemoController
     ArrayList<UUID> repository = new ArrayList<UUID>(65536);
 
     Boolean isOffline = false;
+
+
+    @GetMapping(path="/clientIP", produces = "plain/text")
+    public ResponseEntity<String> clientIP(HttpServletRequest request)
+    {
+        return new ResponseEntity<>(request.getRemoteAddr(), HttpStatus.OK);
+    }
 
     @GetMapping(path="/health/isReady", produces = "plain/text")
     public ResponseEntity<String> readinessProbe(@RequestParam Optional<Boolean> offline)
