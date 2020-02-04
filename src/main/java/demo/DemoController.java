@@ -31,6 +31,17 @@ public class DemoController
         return new ResponseEntity<>(request.getRemoteAddr(), HttpStatus.OK);
     }
 
+    @GetMapping(path="/stats", produces = "application/json")
+    public ResponseEntity<AppStats> getAppStats(HttpServletRequest request) 
+    {
+        // Obtém métricas de utilização da aplicação
+        AppStats appStats = AppStats.create(request);
+
+        // Retorna status HTTP 200 OK
+        return new ResponseEntity<>(appStats, HttpStatus.OK);
+    }
+
+
     @GetMapping(path="/health/isReady", produces = "plain/text")
     public ResponseEntity<String> readinessProbe(@RequestParam Optional<Boolean> offline)
     {
@@ -70,8 +81,8 @@ public class DemoController
         return new ResponseEntity<>("Ready", HttpStatus.OK);
 	}
 	
-    @GetMapping(path="/health/isAlive", produces = "application/json")
-    public ResponseEntity<AppStats> livenessProbe() 
+    @GetMapping(path="/health/isAlive", produces = "plain/text")
+    public ResponseEntity<String> livenessProbe() 
     {
         // Obtém o threshold de memória em uso (percentual) que implica no restart do POD
         int memoryUsagePercentThreshold = Helpers.getEnvVar("MEMORY_USAGE_PERCENT_THRESHOLD", 90);
@@ -84,11 +95,11 @@ public class DemoController
         {
             System.out.printf("[%s] The liveness probe has failed due to excessive memory consumption (Used memory: %f%%)\n", 
                              new Date(), appStats.getPercentUsedMemory());
-            return new ResponseEntity<>(appStats, HttpStatus.SERVICE_UNAVAILABLE);
+            return new ResponseEntity<>("Liveness probe failed", HttpStatus.SERVICE_UNAVAILABLE);
         }
 
         // Retorna status HTTP 200 OK
-        return new ResponseEntity<>(appStats, HttpStatus.OK);
+        return new ResponseEntity<>("OK", HttpStatus.OK);
 	}
 
     @PostMapping(path = "/transaction", consumes = "application/json", produces = "application/json")

@@ -5,7 +5,7 @@
 
     <groupId>org.springframework</groupId>
     <artifactId>demo-aks</artifactId>
-    <version>0.4.0</version>
+    <version>0.5.0</version>
     <packaging>war</packaging>
     <name>AKS Demo Application</name>
     <description>This is a demo Spring Boot application running on Azure Kubernetes Service</description>

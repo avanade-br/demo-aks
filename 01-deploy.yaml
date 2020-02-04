@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: demo-aks
-        image: avanadebr/demo-aks:0.4.0-zulu
+        image: avanadebr/demo-aks:0.5.0-zulu
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
@@ -54,6 +54,7 @@ metadata:
   name: demo-aks
 spec:
   type: LoadBalancer
+  externalTrafficPolicy: Local
   selector:
     app: demo-aks
   ports:
